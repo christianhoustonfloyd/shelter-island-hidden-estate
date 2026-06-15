@@ -276,22 +276,11 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 500; margin: 0; }
   border-top: 1px solid var(--line);
 }
 .feature-list li {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
   margin-bottom: 14px;
   line-height: 1.5;
   color: var(--charcoal);
 }
 .feature-list li:last-child { margin-bottom: 0; }
-.feature-list li::before {
-  content: "";
-  flex: 0 0 7px;
-  width: 7px; height: 7px;
-  margin-top: 0.45em;
-  border: 1px solid var(--sage);
-  transform: rotate(45deg);
-}
 .feature-text .btn { margin-top: 26px; }
 
 /* ============================================================
