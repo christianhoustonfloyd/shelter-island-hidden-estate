@@ -62,7 +62,6 @@
     buildGallery();
     initFilters();
     initLightbox();
-    initForm();
   });
 
   /* ---------- hero photo slider ---------- */
@@ -270,72 +269,8 @@
     });
   }
 
-  /* ---------- inquiry form -> FormSubmit (AJAX) ---------- */
-  function initForm() {
-    var form = $("#inquiryForm");
-    var note = $("#formNote");
-    var button = $("#formSubmit");
-    if (!form) return;
-
-    var FALLBACK = "Something went wrong — please email christian.houston@gmail.com directly.";
-
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-
-      // Honeypot: if a bot filled the hidden field, pretend success and stop.
-      var honey = form.querySelector('[name="_honey"]');
-      if (honey && honey.value) {
-        if (note) note.textContent = "Thank you — your inquiry has been sent.";
-        return;
-      }
-
-      if (!val("f-name") || !val("f-email")) {
-        if (note) note.textContent = "Please add your name and email so we can reply.";
-        return;
-      }
-
-      setBusy(true);
-      if (note) note.textContent = "Sending…";
-
-      var endpoint = form.action.replace("formsubmit.co/", "formsubmit.co/ajax/");
-
-      fetch(endpoint, {
-        method: "POST",
-        headers: { "Accept": "application/json" },
-        body: new FormData(form)
-      })
-        .then(function (res) {
-          return res.json().then(function (data) {
-            return { ok: res.ok, data: data };
-          });
-        })
-        .then(function (r) {
-          var success = r.ok && r.data && String(r.data.success) === "true";
-          if (success) {
-            form.reset();
-            if (note) note.textContent = "Thank you — your inquiry has been sent. We'll be in touch soon.";
-          } else if (note) {
-            note.textContent = FALLBACK;
-          }
-        })
-        .catch(function () {
-          if (note) note.textContent = FALLBACK;
-        })
-        .finally(function () {
-          setBusy(false);
-        });
-    });
-
-    function setBusy(busy) {
-      if (!button) return;
-      button.disabled = busy;
-      button.style.opacity = busy ? "0.6" : "";
-      button.style.pointerEvents = busy ? "none" : "";
-    }
-
-    function val(id) {
-      var el = document.getElementById(id);
-      return el ? el.value.trim() : "";
-    }
-  }
+  /* The inquiry form now submits natively to FormSubmit (a normal POST that
+     passes Cloudflare), redirecting to thank-you.html via the _next field.
+     No JS handler is needed — the honeypot and validation are handled by the
+     hidden _honey field and the inputs' `required` attributes. */
 })();

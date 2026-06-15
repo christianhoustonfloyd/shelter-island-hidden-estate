@@ -212,11 +212,12 @@
         </ul>
       </div>
 
-      <form class="inquiry-form reveal" id="inquiryForm" action="https://formsubmit.co/christian.houston@gmail.com" method="POST" novalidate>
+      <form class="inquiry-form reveal" id="inquiryForm" action="https://formsubmit.co/christian.houston@gmail.com" method="POST">
         <!-- FormSubmit configuration -->
         <input type="hidden" name="_subject" value="New rental inquiry — Shelter Island Hidden Estate" />
         <input type="hidden" name="_template" value="table" />
         <input type="hidden" name="_captcha" value="false" />
+        <input type="hidden" name="_next" value="https://christianhoustonfloyd.github.io/shelter-island-hidden-estate/thank-you.html" />
         <!-- honeypot: bots fill this; humans never see it -->
         <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
 
@@ -247,7 +248,7 @@
           <textarea id="f-message" name="message" rows="4" placeholder="Tell us a little about your trip…"></textarea>
         </div>
         <button type="submit" class="btn btn-solid btn-block" id="formSubmit">Send Inquiry</button>
-        <p class="form-note" id="formNote" role="status"></p>
+        <p class="form-note">We'll reply by email, usually within a day.</p>
       </form>
     </div>
   </section>
