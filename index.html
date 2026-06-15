@@ -212,7 +212,14 @@
         </ul>
       </div>
 
-      <form class="inquiry-form reveal" id="inquiryForm" novalidate>
+      <form class="inquiry-form reveal" id="inquiryForm" action="https://formsubmit.co/christian.houston@gmail.com" method="POST" novalidate>
+        <!-- FormSubmit configuration -->
+        <input type="hidden" name="_subject" value="New rental inquiry — Shelter Island Hidden Estate" />
+        <input type="hidden" name="_template" value="table" />
+        <input type="hidden" name="_captcha" value="false" />
+        <!-- honeypot: bots fill this; humans never see it -->
+        <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
         <div class="field">
           <label for="f-name">Name</label>
           <input type="text" id="f-name" name="name" autocomplete="name" required />
@@ -224,22 +231,22 @@
         <div class="field-row">
           <div class="field">
             <label for="f-arrive">Arrival</label>
-            <input type="date" id="f-arrive" name="arrive" />
+            <input type="date" id="f-arrive" name="Arrival" />
           </div>
           <div class="field">
             <label for="f-depart">Departure</label>
-            <input type="date" id="f-depart" name="depart" />
+            <input type="date" id="f-depart" name="Departure" />
           </div>
         </div>
         <div class="field">
           <label for="f-guests">Guests</label>
-          <input type="number" id="f-guests" name="guests" min="1" max="20" />
+          <input type="number" id="f-guests" name="Guests" min="1" max="20" />
         </div>
         <div class="field">
           <label for="f-message">Message</label>
           <textarea id="f-message" name="message" rows="4" placeholder="Tell us a little about your trip…"></textarea>
         </div>
-        <button type="submit" class="btn btn-solid btn-block">Send Inquiry</button>
+        <button type="submit" class="btn btn-solid btn-block" id="formSubmit">Send Inquiry</button>
         <p class="form-note" id="formNote" role="status"></p>
       </form>
     </div>

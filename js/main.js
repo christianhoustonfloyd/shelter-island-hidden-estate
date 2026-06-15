@@ -270,45 +270,68 @@
     });
   }
 
-  /* ---------- inquiry form -> mailto ---------- */
+  /* ---------- inquiry form -> FormSubmit (AJAX) ---------- */
   function initForm() {
     var form = $("#inquiryForm");
     var note = $("#formNote");
+    var button = $("#formSubmit");
     if (!form) return;
+
+    var FALLBACK = "Something went wrong — please email christian.houston@gmail.com directly.";
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
 
-      var name = val("f-name");
-      var email = val("f-email");
-      if (!name || !email) {
+      // Honeypot: if a bot filled the hidden field, pretend success and stop.
+      var honey = form.querySelector('[name="_honey"]');
+      if (honey && honey.value) {
+        if (note) note.textContent = "Thank you — your inquiry has been sent.";
+        return;
+      }
+
+      if (!val("f-name") || !val("f-email")) {
         if (note) note.textContent = "Please add your name and email so we can reply.";
         return;
       }
 
-      var arrive = val("f-arrive");
-      var depart = val("f-depart");
-      var guests = val("f-guests");
-      var message = val("f-message");
+      setBusy(true);
+      if (note) note.textContent = "Sending…";
 
-      var lines = [
-        "Name: " + name,
-        "Email: " + email,
-        arrive ? "Arrival: " + arrive : null,
-        depart ? "Departure: " + depart : null,
-        guests ? "Guests: " + guests : null,
-        "",
-        message || "(no message)"
-      ].filter(function (l) { return l !== null; });
+      var endpoint = form.action.replace("formsubmit.co/", "formsubmit.co/ajax/");
 
-      var subject = "Rental inquiry — Shelter Island Hidden Estate";
-      var href = "mailto:christian.houston@gmail.com" +
-        "?subject=" + encodeURIComponent(subject) +
-        "&body=" + encodeURIComponent(lines.join("\n"));
-
-      window.location.href = href;
-      if (note) note.textContent = "Opening your email app… if nothing happens, write us at christian.houston@gmail.com.";
+      fetch(endpoint, {
+        method: "POST",
+        headers: { "Accept": "application/json" },
+        body: new FormData(form)
+      })
+        .then(function (res) {
+          return res.json().then(function (data) {
+            return { ok: res.ok, data: data };
+          });
+        })
+        .then(function (r) {
+          var success = r.ok && r.data && String(r.data.success) === "true";
+          if (success) {
+            form.reset();
+            if (note) note.textContent = "Thank you — your inquiry has been sent. We'll be in touch soon.";
+          } else if (note) {
+            note.textContent = FALLBACK;
+          }
+        })
+        .catch(function () {
+          if (note) note.textContent = FALLBACK;
+        })
+        .finally(function () {
+          setBusy(false);
+        });
     });
+
+    function setBusy(busy) {
+      if (!button) return;
+      button.disabled = busy;
+      button.style.opacity = busy ? "0.6" : "";
+      button.style.pointerEvents = busy ? "none" : "";
+    }
 
     function val(id) {
       var el = document.getElementById(id);
