@@ -128,7 +128,23 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 500; margin: 0; }
   background: currentColor; transition: width 0.25s ease;
 }
 .nav-link:hover::after { width: 100%; }
-.btn-nav { padding: 11px 24px; }
+
+/* Inquire button — high-contrast, always solid */
+.btn-nav {
+  background: var(--sage);
+  color: var(--white);
+  border-color: var(--sage);
+  padding: 13px 30px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  box-shadow: 0 8px 22px rgba(43, 43, 40, 0.28);
+}
+.btn-nav:hover {
+  background: var(--sage-dark);
+  border-color: var(--sage-dark);
+  color: var(--white);
+  transform: translateY(-1px);
+}
 
 /* scrolled state */
 .site-header.scrolled { background: var(--cream); box-shadow: 0 1px 0 var(--line); }
@@ -154,15 +170,45 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 500; margin: 0; }
   align-items: center;
   justify-content: center;
   text-align: center;
-  background: url("../photos/Drone_3-1.jpg") center / cover no-repeat;
-  background-attachment: fixed;
+  overflow: hidden;
   color: var(--white);
 }
-.hero-overlay {
+/* sliding photo track */
+.hero-track {
   position: absolute; inset: 0;
+  display: flex;
+  width: 200%;
+  transition: transform 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.hero-slide {
+  width: 50%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+}
+.hero-overlay {
+  position: absolute; inset: 0; z-index: 1;
   background: linear-gradient(180deg, rgba(20,22,18,0.45) 0%, rgba(20,22,18,0.30) 40%, rgba(20,22,18,0.55) 100%);
 }
-.hero-content { position: relative; z-index: 2; max-width: 760px; padding: 0 28px; }
+/* hero prev/next arrows */
+.hero-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  z-index: 3;
+  width: 56px; height: 56px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem; line-height: 1; color: var(--white);
+  background: rgba(20, 22, 18, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.25s ease, opacity 0.35s ease, transform 0.25s ease;
+}
+.hero-arrow:hover { background: rgba(20, 22, 18, 0.6); }
+.hero-prev { left: 26px; }
+.hero-next { right: 26px; }
+.hero-arrow.is-hidden { opacity: 0; pointer-events: none; }
+.hero-content { position: relative; z-index: 2; max-width: 760px; padding: 0 28px; pointer-events: none; }
+.hero-content .btn { pointer-events: auto; }
 .hero-title {
   font-size: clamp(2.8rem, 7vw, 5.4rem);
   line-height: 1.05;
@@ -410,8 +456,10 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 500; margin: 0; }
   .feature-row { grid-template-columns: 1fr; gap: 32px; }
   .feature-row.reverse .feature-media { order: 0; }
   .feature-row + .feature-row { margin-top: 64px; }
-  .hero { background-attachment: scroll; }
   .banner { background-attachment: scroll; padding: 110px 0; }
+  .hero-arrow { width: 46px; height: 46px; font-size: 1.6rem; }
+  .hero-prev { left: 14px; }
+  .hero-next { right: 14px; }
 }
 
 @media (max-width: 560px) {

@@ -57,12 +57,39 @@
     initYear();
     initHeaderScroll();
     initMobileNav();
+    initHero();
     initReveal();
     buildGallery();
     initFilters();
     initLightbox();
     initForm();
   });
+
+  /* ---------- hero photo slider ---------- */
+  function initHero() {
+    var track = $("#heroTrack");
+    var prev = $("#heroPrev");
+    var next = $("#heroNext");
+    if (!track || !prev || !next) return;
+
+    var count = track.querySelectorAll(".hero-slide").length;
+    var index = 0;
+
+    var update = function () {
+      track.style.transform = "translateX(-" + (index * (100 / count)) + "%)";
+      prev.classList.toggle("is-hidden", index === 0);
+      next.classList.toggle("is-hidden", index === count - 1);
+    };
+
+    next.addEventListener("click", function () {
+      if (index < count - 1) { index++; update(); }
+    });
+    prev.addEventListener("click", function () {
+      if (index > 0) { index--; update(); }
+    });
+
+    update();
+  }
 
   /* ---------- footer year ---------- */
   function initYear() {
